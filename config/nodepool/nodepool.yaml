@@ -1,0 +1,44 @@
+zmq-publishers:
+  - tcp://jenkins.example.com:8888
+images-dir: '/opt/nodepool/dib-images/'
+elements-dir: '/opt/nodepool/elements/'
+labels:
+  - name: fuel_systest
+    image: fuel_systest
+    min-ready: 1
+    providers:
+      - name: ironic
+diskimages:
+  - name: fuel_systest
+    elements:
+      - ubuntu
+      - grub2-nodepool
+      - dhcp-all-interfaces
+      - fuel-systest
+    release: trusty
+    env-vars:
+      DIB_IMAGE_SIZE: 2GB
+      COMPRESS_IMAGE: 'false'
+      TMPDIR: /opt/nodepool/dib_tmp
+      DIB_IMAGE_CACHE: /opt/nodepool/dib_cache
+providers:
+  - name: ironic
+    cloud: ironic-cloud
+    service-type: 'compute'
+    service-name: 'nova'
+    boot-timeout: 1200 #wait a bit till network is up
+    max-servers: 1
+    image-type: raw
+    images:
+      - name: fuel_systest
+        diskimage: fuel_systest
+        min-ram: 32000
+        name-filter: 'bm-flavor'
+        username: 'jenkins'
+        private-key: '/root/.ssh/id_rsa'
+        meta: #disk partition metadata
+          fuel_disk_info: '[{"name": "sda", "extra": [], "free_space": 11000, "type": "disk", "id": "sda", "size": 11000, "volumes": [{"mount": "/", "type": "partition", "file_system": "ext4", "size": 10000}]}]'
+    networks:
+      - net-id: f3d10ae0-40f0-448d-bd72-987d68d9bdac #replace with baremetal network id
+targets:
+  - name: ironictest

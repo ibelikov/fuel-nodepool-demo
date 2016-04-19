@@ -1,0 +1,8 @@
+clouds:
+  ironic-cloud:
+    auth:
+      username: 'admin'
+      password: 'admin'
+      auth_url: 'https://public.fuel.local:5000/v2.0'
+      project_name: 'admin'
+    cacert: '/home/jenkins/workspace/ironic-test/ca.pem' #Path to CA from fuel-qa deployment workspace

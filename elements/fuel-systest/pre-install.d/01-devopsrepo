@@ -1,0 +1,9 @@
+#!/bin/bash 
+set -x
+
+#Add devops repo hosting python-seed-client
+mkdir -p /etc/apt/sources.list.d
+echo "deb http://mirror.fuel-infra.org/devops/ubuntu/ /" > /etc/apt/sources.list.d/devops.list
+
+gpg --keyserver keyserver.ubuntu.com --recv-keys 62BF6A9C1D2B45A2
+gpg -a --export 62BF6A9C1D2B45A2 | apt-key add -

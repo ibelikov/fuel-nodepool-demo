@@ -1,0 +1,16 @@
+#!/bin/bash
+set -x
+
+#add user
+useradd -m jenkins
+usermod jenkins -a -G libvirtd,sudo
+
+#add pubkey
+mkdir /home/jenkins/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCYpwTvkleoU54sPq7y+SL4ASTHr4wvKgLMVa9JhrpGdmeTyVnX6uEo6IGGgHgz7O5GbUcMtAMF0Jw4AZKeJ/6AAEZJPUGKaUlnKGOL0UGR4qc7Gzoy3pnFnoa1h+ulP8akaExvuFQpgt+tHnlUiZj1+rHtSscXEDltumWxaGRDttAPN5S+4UlZxLwHVyAkZgATItEvMZ0hqJ4m42YdyTSw3k1o/Pva3bvjiEmbtnKRYzVZUg4p1pjEbGt8eXpciJ3a7RKmsnQwoqzrGk6gwBtQZ7gPgXFHAdq3fCsTozF2tY7eR2rx0pPW4dSo5W++pDcSJCcV0iAa7UqIAzl2row/" > /home/jenkins/.ssh/authorized_keys
+chmod 600 /home/jenkins/.ssh/authorized_keys
+chown -R jenkins:jenkins /home/jenkins/.ssh
+
+#directory for nodepool metadata
+mkdir /etc/nodepool
+chown jenkins:jenkins /etc/nodepool

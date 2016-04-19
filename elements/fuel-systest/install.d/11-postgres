@@ -1,0 +1,13 @@
+#!/bin/bash
+set -x
+
+#Postgres configuration required by fuel-devops
+pg_version=$(dpkg-query --show --showformat='${version;3}' postgresql)
+pg_createcluster $pg_version main --start
+sed -ir 's/peer/trust/' /etc/postgresql/9.*/main/pg_hba.conf
+service postgresql restart
+sudo -u postgres psql -c "CREATE ROLE fuel_devops WITH LOGIN PASSWORD 'fuel_devops'"
+sudo -u postgres createdb fuel_devops -O fuel_devops
+
+#Workaround for building on the hosts with running postgres
+sed -ir 's/543./5432/' /etc/postgresql/9.*/main/postgresql.conf
